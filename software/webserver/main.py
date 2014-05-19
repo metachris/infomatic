@@ -14,6 +14,8 @@ import signal
 import socket
 import traceback
 import logging
+import subprocess as sub
+
 from os import getpid, remove, kill
 from optparse import OptionParser
 from time import sleep
@@ -51,6 +53,10 @@ application = tornado.web.Application([
 def main(port):
     try:
         logger.info("Starting Infomatic on port %s..." % port)
+        logger.info("waiting 30sec for X to start...")
+        sleep(30)
+        logger.info("Opening midori")
+        sub.Popen(["midori", "-e", "Fullscreen", "-a", "http://metalab.at"]) #open midori
         application.listen(port)
         tornado.ioloop.IOLoop.instance().start()
 
