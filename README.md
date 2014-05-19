@@ -11,9 +11,14 @@ Setup
 
     $ sudo apt-get update
     $ sudo apt-get upgrade
-    
+
     $ sudo apt-get install python-setuptools python-dev
 
     git /etc/
 
+    Setup AVAHI
+
+    sudo apt-get install supervisor
+
     Put software in /opt/
+    
