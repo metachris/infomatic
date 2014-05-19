@@ -52,10 +52,10 @@ application = tornado.web.Application([
 ])
 
 
-def main():
+def main(port):
     try:
-        logger.info("Starting Lounge PIP miracle...")
-        application.listen(8888)
+        logger.info("Starting Infomatic on port %s..." % port)
+        application.listen(port)
         tornado.ioloop.IOLoop.instance().start()
 
     except SystemExit:
@@ -69,8 +69,13 @@ def main():
 
 
 class MyDaemon(Daemon):
+    port = None
+
     def run(self):
-        main()
+        main(self.port)
+
+    def set_port(self, port):
+        self.port = int(port)
 
 
 if __name__ == "__main__":
@@ -79,6 +84,7 @@ if __name__ == "__main__":
     parser = OptionParser(usage=usage, description=desc)
 
     parser.add_option("-d", "--daemon", dest="daemon", action="store_true", help="Daemonize. -d [start|stop|restart]")
+    parser.add_option("-p", "--port", dest="port", help="port (default=8888)")
     parser.add_option("-v", "--version", dest="version", action="store_true", help="Show version")
 
     (options, args) = parser.parse_args()
@@ -87,8 +93,12 @@ if __name__ == "__main__":
         print __version__
         exit(0)
 
+    port = options.port or 8888
+
     if options.daemon:
         daemon = MyDaemon(PIDFILE)
+        daemon.set_port(int(port))
+
         if args[0] == "start":
             daemon.start()
 
@@ -99,4 +109,4 @@ if __name__ == "__main__":
             daemon.restart()
 
     else:
-        main()
+        main(int(port))
