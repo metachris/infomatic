@@ -12,8 +12,9 @@ Setup
     $ sudo apt-get update
     $ sudo apt-get upgrade
 
-    $ sudo apt-get install python-setuptools python-dev
-
+    $ sudo apt-get install python-setuptools python-dev python-pip
+    $ sudo pip install tornado
+    
     git /etc/
 
     Setup AVAHI
@@ -21,4 +22,5 @@ Setup
     sudo apt-get install supervisor
 
     Put software in /opt/
-    
+
+    sudo pip install tornado

@@ -23,6 +23,7 @@ import tornado.web
 import tornado.options
 
 from daemon import Daemon
+from handlers import *
 
 DIR_SCRIPT = os.path.dirname(os.path.realpath(__file__))
 PIDFILE = os.path.join(DIR_SCRIPT, "webserver.pid")
@@ -31,7 +32,7 @@ LOGFILE = os.path.join(DIR_SCRIPT, "webserver.log")
 # Setup Logging
 LOGLEVEL = logging.DEBUG
 logging.basicConfig(filename=LOGFILE, format='%(levelname)s | %(asctime)s | %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("infomatic")
 logger.setLevel(LOGLEVEL)
 
 tornado.options.parse_command_line(["--log_file_prefix=%s" % LOGFILE])
@@ -40,11 +41,6 @@ tornado.options.parse_command_line(["--log_file_prefix=%s" % LOGFILE])
 def signal_handler(signal, frame):
     sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
-
-
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write("Hello, world")
 
 
 application = tornado.web.Application([
