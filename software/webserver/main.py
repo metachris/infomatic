@@ -50,11 +50,12 @@ application = tornado.web.Application([
 ])
 
 
-def main(port):
+def main(port, skip_wait):
     try:
         logger.info("Starting Infomatic on port %s..." % port)
         logger.info("waiting 30sec for X to start...")
-        sleep(30)
+        if not skip_wait:
+            sleep(30)
         logger.info("Opening midori")
         sub.Popen(["midori", "-e", "Fullscreen", "-a", "http://metalab.at"]) #open midori
         application.listen(port)
@@ -71,13 +72,12 @@ def main(port):
 
 
 class MyDaemon(Daemon):
-    port = None
-
     def run(self):
-        main(self.port)
+        main(self.port, self.skip_wait)
 
-    def set_port(self, port):
+    def set_options(self, port, skip_wait=False):
         self.port = int(port)
+        self.skip_wait = skip_wait
 
 
 if __name__ == "__main__":
@@ -88,6 +88,7 @@ if __name__ == "__main__":
     parser.add_option("-d", "--daemon", dest="daemon", action="store_true", help="Daemonize. -d [start|stop|restart]")
     parser.add_option("-p", "--port", dest="port", help="port (default=8888)")
     parser.add_option("-v", "--version", dest="version", action="store_true", help="Show version")
+    parser.add_option("-s", "--skip-wait", dest="skip_wait", action="store_true", help="Skip startup timeout of 30s")
 
     (options, args) = parser.parse_args()
 
@@ -99,7 +100,7 @@ if __name__ == "__main__":
 
     if options.daemon:
         daemon = MyDaemon(PIDFILE)
-        daemon.set_port(int(port))
+        daemon.set_options(int(port), options.skip_wait)
 
         if args[0] == "start":
             daemon.start()
@@ -111,4 +112,4 @@ if __name__ == "__main__":
             daemon.restart()
 
     else:
-        main(int(port))
+        main(int(port), options.skip_wait)
