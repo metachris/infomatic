@@ -14,7 +14,8 @@ logger = logging.getLogger("infomatic")
 def slackomatic_call_api(uri):
     """
     Translates an api-uri eg. `/device/nec/pip/size/large` into
-    http://<SLACKOMATOC_IP/slackomatic/device/nec/pip/size/large
+    `http://<SLACKOMATOC_IP/slackomatic/device/nec/pip/size/large`
+    and executes a HTTP GET request to this url.
     """
     url = "http://%s/slackomatic/%s" % (SLACKOMATIC_IP, uri.lstrip("/"))
     logger.info("slackomatic api call: %s" % url)
