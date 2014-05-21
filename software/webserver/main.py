@@ -53,11 +53,6 @@ application = tornado.web.Application([
 def main(port, skip_wait):
     try:
         logger.info("Starting Infomatic on port %s..." % port)
-        logger.info("waiting 30sec for X to start...")
-        if not skip_wait:
-            sleep(30)
-        logger.info("Opening midori")
-        sub.Popen(["midori", "-e", "Fullscreen", "-a", "http://metalab.at"]) #open midori
         application.listen(port)
         tornado.ioloop.IOLoop.instance().start()
 
