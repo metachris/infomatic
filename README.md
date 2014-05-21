@@ -15,12 +15,11 @@ Setup
 
     $ sudo apt-get install python-setuptools python-dev python-pip
     $ sudo pip install tornado
+    $ sudo pip install requests
 
     git /etc/
 
     Setup AVAHI
-
-    sudo apt-get install supervisor
 
     Put software in /opt/
 
@@ -29,3 +28,12 @@ Setup
 
 
 Midori and webserver are started via `/etc/xdg/lxsession/LXDE/autostart`
+
+
+Restart: `software/webserver/main.py -p 8080 -d restart`
+
+
+App Ideas
+---------
+* Screen Invader
+* Öffentliche Verkehrsmittel

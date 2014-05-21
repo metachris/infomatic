@@ -6,7 +6,7 @@ Author: Chris Hager <chris@linuxuser.at>
 
 License: GPLv3
 """
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 import os
 import sys
@@ -45,12 +45,7 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-application = tornado.web.Application([
-    (r"/", MainHandler),
-])
-
-
-def main(port, skip_wait):
+def main(port):
     try:
         logger.info("Starting Infomatic on port %s..." % port)
         application.listen(port)
@@ -68,11 +63,10 @@ def main(port, skip_wait):
 
 class MyDaemon(Daemon):
     def run(self):
-        main(self.port, self.skip_wait)
+        main(self.port)
 
-    def set_options(self, port, skip_wait=False):
+    def set_options(self, port):
         self.port = int(port)
-        self.skip_wait = skip_wait
 
 
 if __name__ == "__main__":
@@ -83,7 +77,6 @@ if __name__ == "__main__":
     parser.add_option("-d", "--daemon", dest="daemon", action="store_true", help="Daemonize. -d [start|stop|restart]")
     parser.add_option("-p", "--port", dest="port", help="port (default=8888)")
     parser.add_option("-v", "--version", dest="version", action="store_true", help="Show version")
-    parser.add_option("-s", "--skip-wait", dest="skip_wait", action="store_true", help="Skip startup timeout of 30s")
 
     (options, args) = parser.parse_args()
 
@@ -95,7 +88,7 @@ if __name__ == "__main__":
 
     if options.daemon:
         daemon = MyDaemon(PIDFILE)
-        daemon.set_options(int(port), options.skip_wait)
+        daemon.set_options(int(port))
 
         if args[0] == "start":
             daemon.start()
@@ -107,4 +100,4 @@ if __name__ == "__main__":
             daemon.restart()
 
     else:
-        main(int(port), options.skip_wait)
+        main(int(port))
