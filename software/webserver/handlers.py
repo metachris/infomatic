@@ -27,11 +27,13 @@ class MainHandler(tornado.web.RequestHandler):
         url = self.get_argument("url", None, True)
         if url:
             logger.info("load url: %s" % url)
+            sub.Popen(["midori", "-e", "TabNew"])
             sub.Popen(["midori", "-e", "TabCloseOther"])
             sub.Popen(["midori", url])
         self.write("""<p><form action='.'>URL: <input type='text' name='url' /> <input type='submit' value="Open URL" /></form></p>
 <hr><ul>
     <li><a href="/slackomatic">Slackomatic Control</a></li>
+    <li><a href="https://metalab.at/wiki/Infomatic">Infos & Bookmarklet</a></li>
 </ul>""")
 
 
@@ -51,6 +53,7 @@ class BookmarkletHandler(tornado.web.RequestHandler):
             sub.Popen(["midori", url])
             slackomatic_call_api("/device/nec/pip/on")
             slackomatic_call_api("/device/nec/pip/size/large")
+            os.system("nohup /home/pi/pip_off_delayed.sh &")
         self.write("""<html><head></head><script type="text/javascript">window.close();</script><body></body></html>""")
 
 
