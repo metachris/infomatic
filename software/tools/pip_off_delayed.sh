@@ -11,6 +11,5 @@ fi
 echo "$$" > $PIDFILE
 echo "Sleep, then turn pip off"
 
-cd /tmp
 sleep 25
-wget http://127.0.0.1:8080/slackomatic?do=/device/nec/pip/off
+wget -O /dev/null http://127.0.0.1:8080/slackomatic?do=/device/nec/pip/off
